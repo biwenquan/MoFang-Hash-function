@@ -347,5 +347,8 @@ int hash_MDPH(int output_len_bits, const unsigned char *input, uint64_t input_le
 
 int CryptHash(int digest_len_bits, const unsigned char *msg, unsigned long long msg_len_bits, unsigned char *digest)
 {
+	if(digest_len_bits < 0) {
+        return -1;
+    }
     return hash_MDPH(digest_len_bits, msg, msg_len_bits,  digest);
 }
