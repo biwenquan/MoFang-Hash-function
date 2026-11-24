@@ -56,7 +56,8 @@ static const ULL ct[24] = {
 
 
 static inline ULL rotl(ULL x, int shift) {
-    return (x << shift) | (x >> (64 - shift));
+    shift &= 63;
+    return shift ? ((x << shift) | (x >> (64 - shift))) : x;
 }
 
 
@@ -263,5 +264,8 @@ int hash_MDP(int output_len_bits, const unsigned char *input, ULL input_len_bits
 
 int CryptHash(int digest_len_bits, const unsigned char *msg, unsigned long long msg_len_bits, unsigned char *digest)
 {
+	if(digest_len_bits != DIGEST_BIT_LENGTH) {
+        return -1;
+    }
     return hash_MDP(digest_len_bits, msg, msg_len_bits,  digest);
 }
