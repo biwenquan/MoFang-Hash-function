@@ -50,7 +50,8 @@ static const uint64_t ct[24] = {
 
 
 static inline uint64_t rotl(uint64_t x, int shift) {
-    return (x << shift) | (x >> (64 - shift));
+    shift &= 63;
+    return shift ? ((x << shift) | (x >> (64 - shift))) : x;
 }
 
 
@@ -274,5 +275,8 @@ int hash_MDP(int output_len_bits, const unsigned char *input, uint64_t input_len
 
 int CryptHash(int digest_len_bits, const unsigned char *msg, unsigned long long msg_len_bits, unsigned char *digest)
 {
+	if(digest_len_bits < 0) {
+        return -1;
+    }
     return hash_MDP(digest_len_bits, msg, msg_len_bits,  digest);
 }
